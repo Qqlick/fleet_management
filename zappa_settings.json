@@ -1,0 +1,10 @@
+{
+  "dev": {
+    "app_function": "app.app",
+    "profile_name": "default",
+    "project_name": "fleet",
+    "runtime": "python3.7",
+    "aws_region": "us-east-2",
+    "s3_bucket": "zappa-zcleo4sd0"
+  }
+}
