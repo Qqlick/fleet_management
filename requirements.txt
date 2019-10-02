@@ -1,0 +1,7 @@
+Flask
+Flask-Migrate
+flask-restplus
+Flask-Script
+Flask-SQLAlchemy
+PyMySQL
+zappa

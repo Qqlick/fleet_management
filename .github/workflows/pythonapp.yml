@@ -31,7 +31,6 @@ jobs:
           source venv/bin/activate
           pip install pytest
           pytest tests/unit -vvvs
-          ls -alF
       - name: Decrypt large secret
         run: ./.github/scripts/decrypt_secret.sh
         env:
