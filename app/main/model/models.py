@@ -71,7 +71,8 @@ class Vehicle(db.Model):
     fleet_id = db.Column(db.Integer, db.ForeignKey("Fleet.id"))
     fleet = db.relationship("Fleet", back_populates="vehicles")
 
-    def __init__(self, model, plate_number):
+    def __init__(self, model, plate_number, fleet_id=None):
         self.model = model
         self.plate_number = plate_number
         self.registered_on = datetime.now()
+        self.fleet_id = fleet_id
