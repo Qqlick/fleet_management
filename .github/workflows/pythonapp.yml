@@ -26,15 +26,21 @@ jobs:
           source venv/bin/activate
           pip install pipenv
           pipenv sync
+      - name: Decrypt large secret
+        run: ./.github/scripts/decrypt_secret.sh
+        env:
+          KEY: ${{ secrets.KEY }}
       - name: Unit Test with pytest
         run: |
           source venv/bin/activate
           pip install pytest
           pytest tests/unit -vvvs
-      - name: Decrypt large secret
-        run: ./.github/scripts/decrypt_secret.sh
-        env:
-          KEY: ${{ secrets.KEY }}
+
+      - name: Run migrations with alembic
+        run: |
+          source venv/bin/activate
+          python manage.py db upgrade
+
       - name: Deploy to AWS
         run: |
           source venv/bin/activate
