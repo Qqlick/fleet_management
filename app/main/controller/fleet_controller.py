@@ -1,7 +1,7 @@
 from flask import request
 from flask_restplus import Resource
 
-from app.main.service.fleet_service import save_new_fleet, get_all_fleets, get_a_fleet
+from app.main.service.fleet_service import FleetServices
 from app.main.util.fleet_dto import FleetDto
 
 api = FleetDto.api
@@ -13,7 +13,7 @@ class FleetList(Resource):
     @api.marshal_list_with(FleetDto.fleet_resp, envelope='data')
     def get(self):
         """List all registered fleets"""
-        return get_all_fleets()
+        return FleetServices.get_all()
 
     @api.expect(FleetDto.fleet, validate=True)
     @api.response(201, 'Fleet successfully created.')
@@ -22,7 +22,7 @@ class FleetList(Resource):
     def post(self):
         """Creates a new Fleet """
         data = request.json
-        return save_new_fleet(data=data)
+        return FleetServices(data=data).save_new_item()
 
 
 @api.route('/<fleet_id>')
@@ -33,7 +33,7 @@ class Fleet(Resource):
     @api.marshal_with(FleetDto.fleet_detailed)
     def get(self, fleet_id):
         """get a fleet given its identifier"""
-        fleet = get_a_fleet(fleet_id)
+        fleet = FleetServices(public_id=fleet_id).get_an_item()
         if not fleet:
             api.abort(404)
         else:

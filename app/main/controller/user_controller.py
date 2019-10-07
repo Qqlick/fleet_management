@@ -1,7 +1,7 @@
 from flask import request
 from flask_restplus import Resource
 
-from app.main.service.user_service import save_new_user, get_all_users, get_a_user
+from app.main.service.user_service import UserServices
 from app.main.util.user_dto import UserDto
 
 api = UserDto.api
@@ -13,7 +13,7 @@ class UserList(Resource):
     @api.marshal_list_with(UserDto.user_resp, envelope='data', code=200)
     def get(self):
         """List all registered users"""
-        return get_all_users()
+        return UserServices.get_all()
 
     @api.expect(UserDto.user_req, validate=True)
     @api.response(201, 'User successfully created.')
@@ -22,7 +22,7 @@ class UserList(Resource):
     def post(self):
         """Creates a new User """
         data = request.json
-        return save_new_user(data=data)
+        return UserServices(data=data).save_new_item()
 
 
 @api.route('/<user_id>')
@@ -33,7 +33,7 @@ class User(Resource):
     @api.marshal_with(UserDto.user_resp, skip_none=True)
     def get(self, user_id):
         """get a user given its identifier"""
-        user = get_a_user(user_id)
+        user = UserServices(public_id=user_id).get_an_item()
         if not user:
             api.abort(404)
         else:
