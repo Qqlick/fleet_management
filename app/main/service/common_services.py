@@ -12,15 +12,17 @@ class Dbservices:
         self.public_id = public_id
 
     def save_new_item(self):
-        item = self.model.query.filter_by(**{self.name: self.data.get(self.name)}).first()
+        item = self.model.query.filter_by(
+            **{self.name: self.data.get(self.name)}
+        ).first()
         if not item:
             new_item = self.model(**self.data)
             self.save_changes(new_item)
             return new_item
         else:
             response_object = {
-                'status': 'fail',
-                'message': '{} already exists.'.format(self.model.__tablename__),
+                "status": "fail",
+                "message": "{} already exists.".format(self.model.__tablename__),
             }
             return response_object, 409
 

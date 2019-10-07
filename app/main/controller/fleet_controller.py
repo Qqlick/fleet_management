@@ -7,17 +7,17 @@ from app.main.util.fleet_dto import FleetDto
 api = FleetDto.api
 
 
-@api.route('/')
+@api.route("/")
 class FleetList(Resource):
-    @api.doc('list_of_fleets')
-    @api.marshal_list_with(FleetDto.fleet_resp, envelope='data')
+    @api.doc("list_of_fleets")
+    @api.marshal_list_with(FleetDto.fleet_resp, envelope="data")
     def get(self):
         """List all registered fleets"""
         return FleetServices.get_all()
 
     @api.expect(FleetDto.fleet, validate=True)
-    @api.response(201, 'Fleet successfully created.')
-    @api.doc('create a new fleet')
+    @api.response(201, "Fleet successfully created.")
+    @api.doc("create a new fleet")
     @api.marshal_with(FleetDto.fleet_resp, code=201)
     def post(self):
         """Creates a new Fleet """
@@ -25,11 +25,11 @@ class FleetList(Resource):
         return FleetServices(data=data).save_new_item()
 
 
-@api.route('/<fleet_id>')
-@api.param('fleet_id', 'The Fleet identifier')
-@api.response(404, 'Fleet not found.')
+@api.route("/<fleet_id>")
+@api.param("fleet_id", "The Fleet identifier")
+@api.response(404, "Fleet not found.")
 class Fleet(Resource):
-    @api.doc('get a fleet')
+    @api.doc("get a fleet")
     @api.marshal_with(FleetDto.fleet_detailed)
     def get(self, fleet_id):
         """get a fleet given its identifier"""

@@ -5,23 +5,24 @@ from .. import db
 
 class Fleet(db.Model):
     """ Fleet Model for storing fleet related details """
-    __tablename__ = 'Fleet'
+
+    __tablename__ = "Fleet"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(45), unique=True, nullable=False)
     registered_on = db.Column(db.DateTime, nullable=True)
-    status = db.Column(db.String(45), default='active')
+    status = db.Column(db.String(45), default="active")
     users = db.relationship("User", back_populates="fleet", lazy="dynamic")
     vehicles = db.relationship("Vehicle", back_populates="fleet", lazy="dynamic")
 
-    def __init__(self, name, status='active', registered_on=datetime.now()):
+    def __init__(self, name, status="active", registered_on=datetime.now()):
         self.name = name
         self.registered_on = registered_on
         self.status = status
 
 
 class User(db.Model):
-    __tablename__ = 'User'
+    __tablename__ = "User"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(45), nullable=False)
     first_name = db.Column(db.String(45), nullable=False)
@@ -34,7 +35,7 @@ class User(db.Model):
     registered_on = db.Column(db.DateTime, nullable=True)
     last_logged_in = db.Column(db.DateTime, nullable=True)
     current_logged_in = db.Column(db.DateTime, nullable=True)
-    role = db.Column(db.String(45), default='user')
+    role = db.Column(db.String(45), default="user")
     fleet_id = db.Column(db.Integer, db.ForeignKey("Fleet.id"))
     fleet = db.relationship("Fleet", back_populates="users")
 
@@ -43,8 +44,16 @@ class User(db.Model):
     # fleet = db.relationship("Fleet", back_populates="users")
     # fleet_id = db.Column(db.String(45), db.ForeignKey("Fleet.id"))
 
-    def __init__(self, email, first_name, last_name, password, email_confirmation_sent_on=None, role='user',
-                 fleet_id=None):
+    def __init__(
+        self,
+        email,
+        first_name,
+        last_name,
+        password,
+        email_confirmation_sent_on=None,
+        role="user",
+        fleet_id=None,
+    ):
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
@@ -62,6 +71,7 @@ class User(db.Model):
 
 class Vehicle(db.Model):
     """ Vehicle Model for storing vehicle related details """
+
     __tablename__ = "Vehicle"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

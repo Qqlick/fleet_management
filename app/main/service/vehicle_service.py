@@ -4,5 +4,5 @@ from app.main.service.common_services import Dbservices
 
 class VehicleServices(Dbservices):
     model = Vehicle
-    id_name = 'id'
-    name = 'id'
+    id_name = "id"
+    name = "id"

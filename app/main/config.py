@@ -10,47 +10,48 @@ def get_secret():
     region_name = "us-east-2"
 
     session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
+    client = session.client(service_name="secretsmanager", region_name=region_name)
 
     try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
+        get_secret_value_response = client.get_secret_value(SecretId=secret_name)
     except ClientError as e:
-        if e.response['Error']['Code'] == 'DecryptionFailureException':
+        if e.response["Error"]["Code"] == "DecryptionFailureException":
             raise e
-        elif e.response['Error']['Code'] == 'InternalServiceErrorException':
+        elif e.response["Error"]["Code"] == "InternalServiceErrorException":
             raise e
-        elif e.response['Error']['Code'] == 'InvalidParameterException':
+        elif e.response["Error"]["Code"] == "InvalidParameterException":
 
             raise e
-        elif e.response['Error']['Code'] == 'InvalidRequestException':
+        elif e.response["Error"]["Code"] == "InvalidRequestException":
             raise e
-        elif e.response['Error']['Code'] == 'ResourceNotFoundException':
+        elif e.response["Error"]["Code"] == "ResourceNotFoundException":
             raise e
     else:
-        if 'SecretString' in get_secret_value_response:
-            secret = get_secret_value_response['SecretString']
+        if "SecretString" in get_secret_value_response:
+            secret = get_secret_value_response["SecretString"]
             return json.loads(secret)
         else:
-            decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
-            secret_dict = json.loads(json.loads(decoded_binary_secret.decode()).get("SecretString"))
+            decoded_binary_secret = base64.b64decode(
+                get_secret_value_response["SecretBinary"]
+            )
+            secret_dict = json.loads(
+                json.loads(decoded_binary_secret.decode()).get("SecretString")
+            )
 
             return secret_dict
 
 
 def construct_database_url():
-    return 'mysql+pymysql://{username}:{password}@{host}:{port}/portal?charset=utf8mb4'.format(**get_secret())
+    return "mysql+pymysql://{username}:{password}@{host}:{port}/portal?charset=utf8mb4".format(
+        **get_secret()
+    )
 
 
 class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
-    SECRET_KEY = 'this-really-needs-to-be-changed'
+    SECRET_KEY = "this-really-needs-to-be-changed"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = construct_database_url()
 
