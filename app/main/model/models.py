@@ -68,7 +68,7 @@ class Vehicle(db.Model):
     model = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     plate_number = db.Column(db.String(45), unique=True, nullable=False)
-    fleet_fk = db.Column(db.Integer, db.ForeignKey("Fleet.id"))
+    fleet_id = db.Column(db.Integer, db.ForeignKey("Fleet.id"))
     fleet = db.relationship("Fleet", back_populates="vehicles")
 
     def __init__(self, model, plate_number):

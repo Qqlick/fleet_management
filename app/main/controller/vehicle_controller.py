@@ -1,40 +1,40 @@
+
 from flask import request
 from flask_restplus import Resource
 
-from app.main.service.user_service import save_new_user, get_all_users, get_a_user
-from app.main.util.user_dto import UserDto
+from app.main.service.vehicle_service import VehicleServices
+from app.main.util.vehicle_dto import VehicleDto
 
-api = UserDto.api
+api = VehicleDto.api
 
 
 @api.route('/')
-class UserList(Resource):
-    @api.doc('list_of_registered_users')
-    @api.marshal_list_with(UserDto.user_resp, envelope='data', code=200)
+class VehicleList(Resource):
+    @api.doc('list_of_registered_vehicles')
+    @api.marshal_list_with(VehicleDto.vehicle_req, envelope='data', code=200)
     def get(self):
         """List all registered users"""
-        return get_all_users()
+        return VehicleServices.get_all()
 
-    @api.expect(UserDto.user_req, validate=True)
-    @api.response(201, 'User successfully created.')
-    @api.doc('create a new user')
-    @api.marshal_with(UserDto.user_resp, code=201)
+    @api.expect(VehicleDto.vehicle_req, validate=True)
+    @api.response(201, 'Vehicle successfully created.')
+    @api.doc('create a new vehicle')
+    @api.marshal_with(VehicleDto.vehicle_resp, code=201)
     def post(self):
-        """Creates a new User """
+        """Creates a new Vehicle """
         data = request.json
-        return save_new_user(data=data)
+        return VehicleServices(data=data).save_new_item()
 
-
-@api.route('/<user_id>')
-@api.param('user_id', 'The User identifier')
-@api.response(404, 'User not found.')
-class User(Resource):
-    @api.doc('get a user')
-    @api.marshal_with(UserDto.user_resp, skip_none=True)
-    def get(self, user_id):
-        """get a user given its identifier"""
-        user = get_a_user(user_id)
-        if not user:
+@api.route('/<vehicle_id>')
+@api.param('vehicle_id', 'The Vehicle identifier')
+@api.response(404, 'Vehicle not found.')
+class Vehicle(Resource):
+    @api.doc('get a vehicle')
+    @api.marshal_with(VehicleDto.vehicle_resp, skip_none=True)
+    def get(self, vehicle_id):
+        """get a vehicle given its identifier"""
+        vehicle = VehicleServices(public_id=vehicle_id).get_an_item()
+        if not vehicle:
             api.abort(404)
         else:
-            return user
+            return vehicle
