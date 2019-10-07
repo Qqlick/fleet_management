@@ -6,9 +6,9 @@ from .config import ProductionConfig
 db = SQLAlchemy()
 
 app = Flask(__name__)
-app.config.from_object(ProductionConfig)
-db.init_app(app)
 
 
 def create_app():
+    app.config.from_object(ProductionConfig)
+    db.init_app(app)
     return app
