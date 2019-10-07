@@ -39,11 +39,6 @@ class User(db.Model):
     fleet_id = db.Column(db.Integer, db.ForeignKey("Fleet.id"))
     fleet = db.relationship("Fleet", back_populates="users")
 
-    #
-    #
-    # fleet = db.relationship("Fleet", back_populates="users")
-    # fleet_id = db.Column(db.String(45), db.ForeignKey("Fleet.id"))
-
     def __init__(
         self,
         email,

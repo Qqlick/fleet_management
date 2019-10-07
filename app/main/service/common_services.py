@@ -8,7 +8,6 @@ class Dbservices:
 
     def __init__(self, data=None, public_id=None):
         self.data = data
-        # self.model = model
         self.public_id = public_id
 
     def save_new_item(self):

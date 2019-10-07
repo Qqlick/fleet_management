@@ -22,8 +22,3 @@ class UserDto:
             "user_id": fields.String(attribute="id"),
         },
     )
-
-    # import app.main.util.fleet_dto
-    # user_detailed = user_resp.clone('User_detailed', {
-    #     'fleet': fields.Nested(app.main.util.fleet_dto.FleetDto.fleet_resp, skip_none=True)
-    # })
